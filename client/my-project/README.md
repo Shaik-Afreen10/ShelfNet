@@ -1,16 +1,110 @@
-# React + Vite
+# 📚 ShelfNet
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ShelfNet is a full-stack web bookstore management platform built using the MERN stack (MongoDB, Express.js, React, Node.js) paired with Prisma ORM. It features secure user authentication, role-based controls, and a fully responsive interface.
 
-Currently, two official plugins are available:
+## 🌐 Live Application URLs
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The application is split into microservices and hosted across optimized cloud platforms:
+* **Frontend Web Application (Vercel):** [https://shelf-fekj3vala-afshaik775-5021s-projects.vercel.app](https://shelf-fekj3vala-afshaik775-5021s-projects.vercel.app)
+* **Backend Production API (Render):** [https://onrender.com](https://onrender.com)
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🛠️ Key Features
 
-## Expanding the ESLint configuration
+* **User Authentication:** Secure user and administrator access sessions managed via JSON Web Tokens (JWT).
+* **Dynamic Dashboards:** Dedicated operational routes for regular platform users (`/bookshelf`) and store administrators (`/adminUi/dashboard`).
+* **Inventory Management:** Administrative forms to add, manage, track, and catalog books and genres.
+* **Seamless Routing:** Production client-side routing fallback configurations enabled natively using Vercel rewrites.
+* **Modern Interface:** Polished UI designs styled with Tailwind CSS v4.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## 🚀 Tech Stack
+
+### Frontend Architecture
+* **Core Framework:** React.js (Compiled with Vite Engine)
+* **Styling Framework:** Tailwind CSS v4 (Via `@tailwindcss/vite` compiler plugin)
+* **Deployment Platform:** Vercel
+
+### Backend Architecture
+* **Runtime Engine:** Node.js
+* **Server Framework:** Express.js
+* **Database Layer:** MongoDB Atlas
+* **Object-Relational Mapping (ORM):** Prisma Client
+* **Deployment Platform:** Render (Free Tier Web Service)
+
+---
+
+## 📂 Repository Layout
+
+```text
+shelfs/
+├── client/                 # Frontend sub-system
+│   └── my-project/
+│       ├── src/
+│       │   ├── assets/     # Static visual elements (Images/Logos)
+│       │   ├── components/ # View UI Modules (adminUi, userui, common)
+│       │   ├── main.css    # Tailwind @import directive entry
+│       │   └── main.jsx    # React bundle mount point
+│       ├── vercel.json     # Vercel router rewrite rule configuration
+│       └── package.json
+└── server/                 # Backend sub-system
+    ├── prisma/             # Database architecture mapping schemas
+    ├── router/             # Express API path parameters
+    ├── index.js            # Node app execution entry point
+    └── package.json
+```
+
+---
+
+## ⚙️ Local Installation & Environment Execution
+
+### 1. System Setup
+Clone the codebase down to your operating device:
+```bash
+git clone https://github.com
+cd ShelfNet
+```
+
+### 2. Backend Configurations
+Navigate to your backend server folder and initialize environmental parameters:
+```bash
+cd server
+touch .env
+```
+Populate the newly generated `.env` file with your direct secrets:
+```text
+PORT=8060
+DATABASE_URL="your-mongodb-atlas-connection-string"
+JWT_SECRET_TOKEN="your-secure-jwt-string"
+```
+Install system node packages, run internal database syncs, and initialize the system:
+```bash
+npm install
+npx prisma generate
+npm start
+```
+
+### 3. Frontend Execution
+Open a secondary terminal process, access your UI layer, and mount the developer engine locally:
+```bash
+cd client/my-project
+npm install
+npm run dev
+```
+
+---
+
+## ☁️ Cloud Deployment Configurations
+
+### Vercel Deployment parameters (`client/my-project`)
+* **Framework Preset:** Vite
+* **Root Directory:** `client/my-project`
+* **Build Command:** `npm install && npm run build`
+* **Output Directory:** `dist`
+
+### Render Deployment parameters (`server`)
+* **Root Directory:** `server`
+* **Build Command:** `npm install && node ./node_modules/prisma/build/index.js generate`
+* **Start Command:** `node index.js`
