@@ -11,10 +11,10 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  // 🔹 Dynamic API Base URL Setup
+  // 🔹 Dynamic API Base URL Setup (TYPO FIXED)
   const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost:8060'                    // Local Dev URL
-    : 'https://onrender.com';            // Live Render Backend URL
+    : 'https://shelfnet.onrender.com';            // Live Render Backend URL
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,8 +22,8 @@ export default function Login() {
     setIsSuccess(false);
 
     try {
-      // 🛠️ Fixed to use the dynamic BACKEND_URL string wrapper instead of static localhost
-      const response = await axios.post(`${BACKEND_URL}/api/${role}/login`, {
+      // 🛠️ Added .toLowerCase() to match your standard backend Express router patterns
+      const response = await axios.post(`${BACKEND_URL}/api/${role.toLowerCase()}/login`, {
         email: email,
         pass: pass,
       });
@@ -51,17 +51,14 @@ export default function Login() {
 
   return (
     <div className="relative h-screen flex justify-center items-center p-4 overflow-hidden font-[Raleway]">
-      {/* 🔹 Global Styles (Fonts) */}
       <style>
         {`
           @import url('https://fonts.googleapis.com/css2?family=Pacifico&family=Raleway:ital,wght@0,300;0,400;1,300&display=swap');
-          
           .font-\\[Pacifico\\] { font-family: 'Pacifico', cursive; }
           .font-\\[Raleway\\] { font-family: 'Raleway', sans-serif; }
         `}
       </style>
 
-      {/* 🔹 Background Layer */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{
@@ -71,10 +68,8 @@ export default function Login() {
         }}
       ></div>
 
-      {/* 🔹 Overlay Layer */}
       <div className="absolute inset-0 bg-black/40 z-1"></div>
 
-      {/* 🔹 Logo Section */}
       <div className="absolute top-8 left-8 text-white z-20">
         <h1 className="text-6xl font-[Pacifico] tracking-wider [text-shadow:2px_2px_5px_rgba(0,0,0,0.8)]">
           ShelfNet
@@ -84,7 +79,6 @@ export default function Login() {
         </p>
       </div>
 
-      {/* 🔹 Back to Home Button */}
       <Link
         to="/"
         className="absolute top-8 right-8 z-20 flex items-center text-amber-300 hover:text-amber-100 transition-colors duration-200 group"
@@ -104,7 +98,6 @@ export default function Login() {
         Back to Home
       </Link>
 
-      {/* 🔹 Login Form */}
       <form
         className="relative z-20 p-8 bg-black/50 rounded-xl shadow-2xl max-w-md w-full border border-amber-400"
         onSubmit={handleLogin}
@@ -150,9 +143,7 @@ export default function Login() {
         {message && (
           <p
             className={`mt-4 text-center text-lg font-medium ${
-              isSuccess
-                ? "text-green-400 [text-shadow:0_0_8px_#4ade80,0_0_15px_#4ade80]"
-                : "text-red-400 [text-shadow:0_0_8px_#f87171,0_0_15px_#f87171]"
+              isSuccess ? "text-green-400" : "text-red-400"
             }`}
           >
             {message}
@@ -170,10 +161,8 @@ export default function Login() {
         </div>
       </form>
 
-      {/* 🔹 Footer */}
       <footer className="absolute bottom-0 w-full z-20 text-center text-amber-200/70 py-4 border-t border-amber-200">
         <p>&copy; 2025 ShelfNet. All rights reserved.</p>
-        <p className="text-sm mt-1">Where stories live forever.</p>
       </footer>
     </div>
   );
