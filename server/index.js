@@ -12,9 +12,12 @@ const {ConnectDB}= require('./utils/dbConnector');
 app.use('/payment',paymentRouter);
 app.use('/api/admin',adminRouter);
 app.use('/api/user',userRouter);
-app.listen(process.env.PORT,()=>{
-    console.log("App is running ");
-})
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
+
 
 //download and extract and open in vs code
 //cd server 
