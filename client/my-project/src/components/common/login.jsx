@@ -1,20 +1,20 @@
 import { useState } from "react";
-// 1. Import the REAL axios, Link, and useNavigate
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-
-// --- End of Mocks --- (All mock code has been removed)
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
-  // 2. Add state for the role
   const [role, setRole] = useState("User"); 
   const [message, setMessage] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // 3. Use the REAL navigate hook
   const navigate = useNavigate();
+
+  // 🔹 Dynamic API Base URL Setup
+  const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost:8060'                    // Local Dev URL
+    : 'https://onrender.com';            // Live Render Backend URL
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,8 +22,8 @@ export default function Login() {
     setIsSuccess(false);
 
     try {
-      // 4. Use the 'role' state to build the correct URL
-      const response = await axios.post(`http://localhost:8060/api/${role}/login`, {
+      // 🛠️ Fixed to use the dynamic BACKEND_URL string wrapper instead of static localhost
+      const response = await axios.post(`${BACKEND_URL}/api/${role}/login`, {
         email: email,
         pass: pass,
       });
@@ -31,13 +31,12 @@ export default function Login() {
       setMessage(response.data?.message || "Login successful!");
       setIsSuccess(true);
       
-      // 5. Save the token and redirect to the correct dashboard
       const token = response.data.token;
       if (role === "Admin" && token) {
-        localStorage.setItem('adminToken', token); // For admin pages
+        localStorage.setItem('adminToken', token);
         setTimeout(() => navigate("/adminUi/dashboard"), 1000);
       } else if (role === "User" && token) {
-        localStorage.setItem('userToken', token); // For user pages
+        localStorage.setItem('userToken', token);
         setTimeout(() => navigate("/bookshelf"), 1000);
       }
 
@@ -85,7 +84,7 @@ export default function Login() {
         </p>
       </div>
 
-      {/* 🔹 Back to Home Button (Uses the real Link) */}
+      {/* 🔹 Back to Home Button */}
       <Link
         to="/"
         className="absolute top-8 right-8 z-20 flex items-center text-amber-300 hover:text-amber-100 transition-colors duration-200 group"
@@ -131,6 +130,7 @@ export default function Login() {
           placeholder="Password"
           className="w-full p-3 my-2 rounded-lg bg-black/60 text-amber-50 placeholder-white border border-amber-500 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all duration-200"
         />
+        
         <select
           value={role}
           onChange={(e) => setRole(e.target.value)}
@@ -139,7 +139,6 @@ export default function Login() {
           <option value="User">User</option>
           <option value="Admin">Admin</option>
         </select>
-
 
         <button
           type="submit"
@@ -163,7 +162,7 @@ export default function Login() {
         <div className="text-amber-200 mt-6 text-center text-lg">
           Don’t have an account?{" "}
           <Link
-            to="/userui/register" // This link now uses the real Link
+            to="/userui/register"
             className="text-amber-50 hover:underline font-semibold"
           >
             Sign Up now.
