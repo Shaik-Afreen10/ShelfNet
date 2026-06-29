@@ -1,8 +1,12 @@
 import { defineConfig } from 'vite'
-import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react()],
+  server: {
+    historyApiFallback: true, // Ensures local development routing works
+  },
+  preview: {
+    historyApiFallback: true, // Ensures preview builds fall back to index.html
+  }
 })
