@@ -1,12 +1,16 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite' // 🔑 1. Import the Tailwind compiler plugin
 
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(), 
+    tailwindcss() // 🔑 2. Register Tailwind inside the plugins array
+  ],
   server: {
-    historyApiFallback: true, // Ensures local development routing works
+    historyApiFallback: true,
   },
   preview: {
-    historyApiFallback: true, // Ensures preview builds fall back to index.html
+    historyApiFallback: true,
   }
 })
