@@ -2,26 +2,25 @@ const express = require("express")
 const app = express()
 require('dotenv').config()
 const cors = require('cors');
-app.use(cors()); // Enable CORS for all origins
-app.use(express.json())//middleware
+app.use(cors()); 
+app.use(express.json())
+
 const adminRouter = require('./router/adminRoute');
 const userRouter = require('./router/userRoute');
 const paymentRouter = require('./router/paymentRoute');
-const {ConnectDB}= require('./utils/dbConnector');
- ConnectDB();
-app.use('/payment',paymentRouter);
-app.use('/api/admin',adminRouter);
-app.use('/api/user',userRouter);
-const PORT = process.env.PORT || 5000;
+// 1️⃣ IMPORT the new compiler router
+const compilerRouter = require('./router/compilerRoute'); 
 
+const {ConnectDB} = require('./utils/dbConnector');
+ConnectDB();
+
+app.use('/payment', paymentRouter);
+app.use('/api/admin', adminRouter);
+app.use('/api/user', userRouter);
+// 2️⃣ MOUNT the compiler router at the root level matching your test script path
+app.use('/compiler', compilerRouter); 
+
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
 });
-
-
-//download and extract and open in vs code
-//cd server 
-//if node_modules exist / error occur delete no_modules folder 
-//npm i
-//npx prisma generate 
-//npm run dev

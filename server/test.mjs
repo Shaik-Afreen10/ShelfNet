@@ -1,13 +1,17 @@
 import axios from 'axios';
 
-const endpoint = 'http://localhost:8060/compiler/checkCodingAnswer';
+// 🔹 Dynamic API Endpoint Setup for Node.js (process.env)
+// Falls back to localhost if the variable isn't defined
+const BASE_URL = process.env.VITE_API_URL || 'http://localhost:8060';
+const endpoint = `${BASE_URL}/compiler/checkCodingAnswer`;
 
 function createPayload(i) {
   return {
     type: 'run', 
     id: "00262d5f-01e1-4dea-99b8-b5ce82768b6e", 
     language: 71, 
-    code: print('Test ${i}'),
+    // 🛠️ Fixed syntax: wrapped in backticks so it evaluates as a valid string payload
+    code: `print('Test ${i}')`,
     inputs: ['input1', 'input2'] 
   };
 }
@@ -26,6 +30,7 @@ async function sendRequest(i) {
 
 // Run requests in chunks to avoid overload
 async function runConcurrentRequests(total = 200, chunkSize = 50) {
+  console.log(`Starting load test against target: ${endpoint}\n`);
   const startTime = Date.now(); // Start timer
 
   let successCount = 0;
