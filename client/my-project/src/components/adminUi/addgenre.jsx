@@ -7,8 +7,10 @@ function AddGenre() {
   const [message, setMessage] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
+  // 🔹 Dynamic API Base URL Setup for Vercel / Local Dev
+  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8060';
+
   const handleSubmit = async (e) => {
-    // ... (submit logic is unchanged)
     e.preventDefault();
     setMessage('');
     setIsSuccess(false);
@@ -19,8 +21,9 @@ function AddGenre() {
       return;
     }
     try {
+      // CHANGED: Using dynamic baseUrl variable instead of hardcoded localhost
       const response = await axios.post(
-        'http://localhost:8060/api/admin/genre',
+        `${baseUrl}/api/admin/genre`,
         { name: name },
         { headers: { 'Authorization': `Bearer ${token}` } }
       );

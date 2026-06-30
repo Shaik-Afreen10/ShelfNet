@@ -11,10 +11,8 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  // 🔹 Dynamic API Base URL Setup (TYPO FIXED)
-  const BACKEND_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-    ? 'http://localhost:8060'                    // Local Dev URL
-    : 'https://shelfnet.onrender.com';            // Live Render Backend URL
+  // 🔹 Dynamic API Base URL Setup modified for Vercel Environment Variables
+  const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:8060';
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -162,7 +160,7 @@ export default function Login() {
       </form>
 
       <footer className="absolute bottom-0 w-full z-20 text-center text-amber-200/70 py-4 border-t border-amber-200">
-        <p>&copy; 2025 ShelfNet. All rights reserved.</p>
+        <p>&copy; 2026 ShelfNet. All rights reserved.</p>
       </footer>
     </div>
   );

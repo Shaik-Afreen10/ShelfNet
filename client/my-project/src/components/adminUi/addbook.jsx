@@ -18,7 +18,10 @@ const AddBook = () => {
   const [message, setMessage] = useState(null);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  // --- Fetch Genres (Unchanged) ---
+  // 🔹 Dynamic API Base URL Setup for Vercel / Local Dev
+  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8060';
+
+  // --- Fetch Genres ---
   useEffect(() => {
     const fetchGenres = async () => {
       const token = localStorage.getItem('adminToken');
@@ -28,7 +31,8 @@ const AddBook = () => {
         return;
       }
       try {
-        const response = await axios.get('http://localhost:8060/api/admin/viewGenre', {
+        // CHANGED: Using dynamic baseUrl instead of hardcoded localhost
+        const response = await axios.get(`${baseUrl}/api/admin/viewGenre`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         setGenres(response.data.data || []);
@@ -39,7 +43,7 @@ const AddBook = () => {
       }
     };
     fetchGenres();
-  }, []);
+  }, [baseUrl]); // Added baseUrl dependency
 
   const handleSaveBook = async (e) => {
     e.preventDefault();
@@ -64,7 +68,8 @@ const AddBook = () => {
     const token = localStorage.getItem('adminToken');
 
     try {
-      await axios.post('http://localhost:8060/api/admin/addBooks', data, {
+      // CHANGED: Using dynamic baseUrl instead of hardcoded localhost
+      await axios.post(`${baseUrl}/api/admin/addBooks`, data, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -106,7 +111,7 @@ const AddBook = () => {
           />
         </div>
 
-        {/* --- 4. Author Field (NEW) --- */}
+        {/* Author Field */}
         <div>
           <label htmlFor="author" className="block text-sm font-medium text-stone-700">Author</label>
           <input

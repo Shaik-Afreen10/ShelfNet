@@ -5,6 +5,9 @@ import axios from "axios";
 export default function Profile() {
   const navigate = useNavigate();
 
+  // Centralized Base API URL logic
+  const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8060";
+
   // State for user data
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -26,7 +29,8 @@ export default function Profile() {
         return;
       }
       try {
-        const response = await axios.get('http://localhost:8060/api/user/profile', {
+        // CHANGED: Using dynamic baseUrl instead of hardcoded localhost
+        const response = await axios.get(`${baseUrl}/api/user/profile`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         setUser(response.data.data); // Set user data
@@ -38,7 +42,7 @@ export default function Profile() {
       }
     };
     fetchUserProfile();
-  }, [navigate]);
+  }, [navigate, baseUrl]); // Added baseUrl dependency
 
   // --- 2. Edit Button Handlers ---
   const startEditing = (field) => {
@@ -59,9 +63,6 @@ export default function Profile() {
       return;
     }
     
-    // --- THIS IS THE NEXT STEP ---
-    // We need to build the backend endpoint for this.
-    // For now, let's just update the UI state.
     console.log("Saving field:", editingField, "with value:", tempValue);
     
     // Optimistic UI update
@@ -73,11 +74,11 @@ export default function Profile() {
     // --- TODO: Add axios.patch call here ---
     // try {
     //   const token = localStorage.getItem('userToken');
-    //   await axios.patch('http://localhost:8060/api/user/profile', 
+    //   // CHANGED: Adjusted to use dynamic baseUrl when you decide to uncomment this
+    //   await axios.patch(`${baseUrl}/api/user/profile`, 
     //     { [editingField]: tempValue }, // e.g., { name: "New Name" }
     //     { headers: { 'Authorization': `Bearer ${token}` } }
     //   );
-    //   // On success, update state
     //   setUser((prev) => ({ ...prev, [editingField]: tempValue }));
     //   setEditingField(null);
     // } catch (err) {
@@ -212,7 +213,7 @@ export default function Profile() {
 
       {/* Footer */}
       <footer className="absolute bottom-0 w-full z-20 text-center text-amber-200/70 py-4 border-t border-amber-200/50">
-        <p>&copy; 2025 ShelfNet. All rights reserved.</p>
+        <p>&copy; 2026 ShelfNet. All rights reserved.</p>
         <p className="text-sm mt-1">Where stories live forever.</p>
       </footer>
     </div>

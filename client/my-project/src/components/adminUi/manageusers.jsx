@@ -6,12 +6,15 @@ const ManageUsers = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // 🔹 Dynamic API Base URL Setup for Vercel / Local Dev
+  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8060';
+
   // --- 1. State for the Edit Modal ---
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [editFormData, setEditFormData] = useState({ name: '', email: '', pass: '' });
 
-  // --- 2. Fetch Users (Unchanged) ---
+  // --- 2. Fetch Users ---
   useEffect(() => {
     const fetchUsers = async () => {
       setLoading(true);
@@ -23,7 +26,8 @@ const ManageUsers = () => {
         return;
       }
       try {
-        const response = await axios.get('http://localhost:8060/api/admin/allusers', {
+        // CHANGED: Adjusted to use dynamic baseUrl variable
+        const response = await axios.get(`${baseUrl}/api/admin/allusers`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         setUsers(response.data.users || response.data.data || []); 
@@ -35,14 +39,15 @@ const ManageUsers = () => {
       }
     };
     fetchUsers();
-  }, []);
+  }, [baseUrl]); // Added baseUrl dependency
 
   // --- 3. Handlers for Delete ---
   const handleDeleteClick = async (userId) => {
     if (window.confirm("Are you sure you want to delete this user? This action cannot be undone.")) {
       try {
         const token = localStorage.getItem('adminToken');
-        await axios.delete(`http://localhost:8060/api/admin/user/${userId}`, {
+        // CHANGED: Adjusted to use dynamic baseUrl variable
+        await axios.delete(`${baseUrl}/api/admin/user/${userId}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         // Remove user from state to update UI instantly
@@ -84,7 +89,8 @@ const ManageUsers = () => {
     
     try {
       const token = localStorage.getItem('adminToken');
-      const response = await axios.patch(`http://localhost:8060/api/admin/user/${selectedUser.id}`, dataToUpdate, {
+      // CHANGED: Adjusted to use dynamic baseUrl variable
+      const response = await axios.patch(`${baseUrl}/api/admin/user/${selectedUser.id}`, dataToUpdate, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -97,14 +103,13 @@ const ManageUsers = () => {
     } catch (err) {
       console.error("Update error:", err);
       setError(err.response?.data?.message || "Failed to update user.");
-      // Don't close modal if there's an error
     }
   };
 
 
   // --- 5. Render Logic ---
   if (loading) return <p className="text-center text-amber-700">Loading users...</p>;
-  if (error && !isModalOpen) return <p className="text-center text-red-600">{error}</p>; // Only show main error if modal is closed
+  if (error && !isModalOpen) return <p className="text-center text-red-600">{error}</p>;
 
   return (
     <>
@@ -127,7 +132,7 @@ const ManageUsers = () => {
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-stone-900">{user.name}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-stone-700">{user.email}</td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-stone-600 font-mono">{user.id}</td>
-                  {/* --- 6. Action Buttons --- */}
+                  {/* --- Action Buttons --- */}
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                     <button
                       onClick={() => handleEditClick(user)}
@@ -153,7 +158,7 @@ const ManageUsers = () => {
         </div>
       </div>
 
-      {/* --- 7. Edit User Modal --- */}
+      {/* --- Edit User Modal --- */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div className="bg-white p-6 rounded-2xl shadow-2xl w-full max-w-md border border-amber-200">

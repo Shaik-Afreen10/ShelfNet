@@ -7,6 +7,9 @@ const ManageBooks = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // 🔹 Dynamic API Base URL Setup for Vercel / Local Dev
+  const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:8060';
+
   // --- State for the Edit Modal ---
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedBook, setSelectedBook] = useState(null);
@@ -24,7 +27,8 @@ const ManageBooks = () => {
 
     const fetchBooks = async () => {
       try {
-        const response = await axios.get('http://localhost:8060/api/admin/viewBooks', {
+        // CHANGED: Using dynamic baseUrl instead of hardcoded localhost
+        const response = await axios.get(`${baseUrl}/api/admin/viewBooks`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         setBooks(response.data.data || []); 
@@ -37,7 +41,8 @@ const ManageBooks = () => {
     // --- 3. Fetch all genres for the dropdown ---
     const fetchGenres = async () => {
       try {
-        const response = await axios.get('http://localhost:8060/api/admin/viewGenre', {
+        // CHANGED: Using dynamic baseUrl instead of hardcoded localhost
+        const response = await axios.get(`${baseUrl}/api/admin/viewGenre`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         setGenres(response.data.data || []);
@@ -54,14 +59,15 @@ const ManageBooks = () => {
     };
     
     loadData();
-  }, []);
+  }, [baseUrl]); // Added baseUrl dependency
 
   // --- Handler for Delete (Unchanged) ---
   const handleDeleteClick = async (bookId) => {
     if (window.confirm("Are you sure you want to delete this book?")) {
       try {
         const token = localStorage.getItem('adminToken');
-        await axios.delete(`http://localhost:8060/api/admin/book/${bookId}`, {
+        // CHANGED: Using dynamic baseUrl instead of hardcoded localhost
+        await axios.delete(`${baseUrl}/api/admin/book/${bookId}`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         setBooks(books.filter(book => book.id !== bookId));
@@ -100,7 +106,8 @@ const ManageBooks = () => {
     try {
       const token = localStorage.getItem('adminToken');
       // editFormData now includes author and genreId
-      const response = await axios.patch(`http://localhost:8060/api/admin/editBooks/${selectedBook.id}`, editFormData, {
+      // CHANGED: Using dynamic baseUrl instead of hardcoded localhost
+      const response = await axios.patch(`${baseUrl}/api/admin/editBooks/${selectedBook.id}`, editFormData, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       
@@ -116,14 +123,12 @@ const ManageBooks = () => {
   };
 
   if (loading) return <p className="text-center text-amber-700">Loading books...</p>;
- if (error && !isModalOpen)
-  return (
-    <div className="text-center text-red-600 p-4">
-      {typeof error === "string"
-        ? error
-        : JSON.stringify(error)}
-    </div>
-  );
+  if (error && !isModalOpen)
+    return (
+      <div className="text-center text-red-600 p-4">
+        {typeof error === "string" ? error : JSON.stringify(error)}
+      </div>
+    );
 
   return (
     <>

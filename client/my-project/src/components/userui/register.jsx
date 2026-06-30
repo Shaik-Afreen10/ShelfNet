@@ -42,9 +42,13 @@ export default function Register() {
     }
 
     // --- 4. If validation passes, proceed to API call ---
+   // --- 4. If validation passes, proceed to API call ---
     try {
+      // Uses the environment variable if available, otherwise defaults to localhost for your computer
+      const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8060";
+      
       const response = await axios.post(
-        `http://localhost:8060/api/${role}/register`,
+        `${baseUrl}/api/${role}/register`,
         {
           name: name,
           email: email,
