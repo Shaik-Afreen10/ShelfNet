@@ -5,7 +5,7 @@ ShelfNet is a full-stack web application built using the MERN stack (MongoDB, Ex
 ## 🌐 Live Deployments
 
 The application is deployed live and can be accessed through the following links:
-* **Frontend Application:** [https://shelfnet-1.onrender.com](https://shelfnet-1.onrender.com)
+* **Frontend Application:**[https://shelf-b43zd9l76-afshaik775-5021s-projects.vercel.app](https://shelf-b43zd9l76-afshaik775-5021s-projects.vercel.app)
 * **Alternative Mirror / Backend API:** [https://shelfnet.onrender.com](https://shelfnet.onrender.com)
 
 ---
