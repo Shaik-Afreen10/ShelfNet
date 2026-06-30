@@ -48,12 +48,12 @@ export default function Register() {
       const baseUrl = import.meta.env.VITE_API_URL || "http://localhost:8060";
       
       const response = await axios.post(
-        `${baseUrl}/api/${role}/register`,
+        `${baseUrl}/api/user/register`,
         {
           name: name,
           email: email,
           pass: pass,
-          role: role,
+          role: "User",
         }
       );
 
