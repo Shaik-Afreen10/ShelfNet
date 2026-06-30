@@ -9,7 +9,7 @@ const adminRouter = require('./router/adminRoute');
 const userRouter = require('./router/userRoute');
 const paymentRouter = require('./router/paymentRoute');
 // 1️⃣ IMPORT the new compiler router
-const compilerRouter = require('./router/compilerRoute'); 
+const compilerRouter = require('./router/compilerRouter'); 
 
 const {ConnectDB} = require('./utils/dbConnector');
 ConnectDB();
